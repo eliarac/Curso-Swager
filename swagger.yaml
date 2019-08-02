@@ -67,4 +67,30 @@ definitions:
           type: array
           items: 
             $ref: '#/definitions/Conta'
+
+  Conta:
+      type: object
+      properties:
+        agencia:
+          type: string
+          maxLength: 4
+          minLength: 4
+          example: 2779
+        conta: 
+          type: string
+          maxLength: 7
+          minLength: 7
+          example: 0023148
+        digito:
+          type: integer
+          format: int32
+          minLength: 1
+          maxLength: 1
+          example: 5
+        saldo:
+          type: number
+          format: double
+          example: 105.35
+        cliente: 
+          $ref: '#/definitions/Cliente'  
     
