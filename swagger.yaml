@@ -94,7 +94,43 @@ paths:
         500:
           description: Erro no servidor
 
-
+  '/transacao':
+    post:
+      summary: Cadastra Transação na conta 
+      description:  Cadastra uma transacao de débito ou depósito na conta.
+      security:
+        - BasicAuth: []
+      operationId: Cadastra transacao
+      parameters:
+        - in: header
+          type: string
+          name: Authorization
+          required: true
+        - in: body
+          name: transacao
+          schema:
+            $ref: '#/definitions/Transacao'
+          required: true  
+        - in: query
+          name: tipo
+          type: string
+          enum:
+            - debito
+            - deposito
+          required: true
+      
+      responses:
+        201:
+          description: Cadastro de transacao efetuado com sucesso. 
+          schema:
+            $ref: '#/definitions/Transacao'
+        400:
+          description: Requisição inválida
+        401:
+          description: Requisição não autorizada
+        500:
+          description: Erro no servidor    
+  
 definitions:
   Cliente:
       type: object
@@ -144,3 +180,29 @@ definitions:
           example: 105.35
         cliente: 
           $ref: '#/definitions/Cliente'
+        transacao:
+          type: array
+          items:
+            $ref: '#/definitions/Transacao'
+          
+  Transacao:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        tipo:
+          type: string
+          enum:
+            - debito 
+            - deposito
+        valor:
+          type: number
+          format: double
+        data:
+          type: string
+          format: date-time
+        conta:
+          $ref: '#/definitions/Conta'
+
+      
