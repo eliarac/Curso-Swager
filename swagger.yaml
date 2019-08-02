@@ -42,6 +42,31 @@ paths:
           description: Requisicao invalida
         500: 
           description: Erro interno no serrvidor
+          
+  '/conta/{agencia}/{conta}/{digito}/saldo':
+    get:
+      summary: Consulta Saldo
+      description: Consulta o saldo da conta do cliente
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      security:
+         -BasicAuth:
+      operationId: consultaSaldo
+      responses:
+        200:
+          description: Consulta ao saldo efetuada com sucesso 
+          schema:
+            $ref: '#/definitions/Conta/saldo'
+        400:
+          description: Requisição inválida
+        401:
+          description: Requisição não autorizada
+        500:
+          description: Erro interno no servidor
+
+      
 definitions:
   
   Cliente:
