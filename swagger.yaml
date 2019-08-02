@@ -1,5 +1,6 @@
 swagger: '2.0'
 
+
 schemes: 
   - http
   - https
@@ -17,16 +18,24 @@ info:
     url: http://8085/bank-api/v1/contato
     email: suporte@bank.com
 
-
+securityDefinitions:
+  BasicAuth:
+    type: basic
+    
+security: 
+  - BasicAuth: []
+  
+consumes:  
+  - application/json
+produces: 
+  - application/json
+    
+    
 paths:
   '/cliente':
     post:
       summary: Cadastra Cliente
       description: Cadastra um novo cliente
-      consumes:  
-        - application/json
-      produces: 
-        - application/json
       operationId: cadastraCliente
       parameters:
         - in: body
@@ -43,32 +52,50 @@ paths:
         500: 
           description: Erro interno no serrvidor
           
-  '/conta/{agencia}/{conta}/{digito}/saldo':
+          
+  '/conta/{agencia}/{numConta}/{digito}/saldo':
     get:
       summary: Consulta Saldo
-      description: Consulta o saldo da conta do cliente
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      security:
-         -BasicAuth:
+      description: Consulta o saldo da conta do cliente.
       operationId: consultaSaldo
+      security:
+        - BasicAuth: []
+      parameters:
+        - in: path
+          name: agencia
+          type: integer
+          format: int32
+          required: true
+        - in: path
+          name: numConta
+          type: integer
+          format: int64
+          required: true
+        - in: path
+          name: digito
+          type: integer
+          format: int32
+          required: true
+        - in: header
+          name: Authorization
+          type: string
+          required: true
       responses:
         200:
-          description: Consulta ao saldo efetuada com sucesso 
+          description: Consulta a saldo efetuada com sucesso
           schema:
-            $ref: '#/definitions/Conta/saldo'
+            type: number
+            format: double
+            example: 134.68
         400:
           description: Requisição inválida
         401:
           description: Requisição não autorizada
         500:
-          description: Erro interno no servidor
+          description: Erro no servidor
 
-      
+
 definitions:
-  
   Cliente:
       type: object
       properties:
@@ -92,7 +119,6 @@ definitions:
           type: array
           items: 
             $ref: '#/definitions/Conta'
-
   Conta:
       type: object
       properties:
@@ -101,7 +127,7 @@ definitions:
           maxLength: 4
           minLength: 4
           example: 2779
-        conta: 
+        numConta: 
           type: string
           maxLength: 7
           minLength: 7
@@ -117,5 +143,4 @@ definitions:
           format: double
           example: 105.35
         cliente: 
-          $ref: '#/definitions/Cliente'  
-    
+          $ref: '#/definitions/Cliente'
