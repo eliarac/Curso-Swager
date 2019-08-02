@@ -1,0 +1,70 @@
+swagger: '2.0'
+
+schemes: 
+  - http
+  - https
+  
+host: localhost:8085
+basePath: /bank-api/v1
+
+info:
+  version: 1.0.0
+  title: Bank API
+  description: Adiministra a movimentacao bancaria do correntista e controla o acesso através do CPF e senha.
+  termsOfService: http://8085/bank-api/v1/termo-uso
+  contact: 
+    name: Suporte 
+    url: http://8085/bank-api/v1/contato
+    email: suporte@bank.com
+
+
+paths:
+  '/cliente':
+    post:
+      summary: Cadastra Cliente
+      description: Cadastra um novo cliente
+      consumes:  
+        - application/json
+      produces: 
+        - application/json
+      operationId: cadastraCliente
+      parameters:
+        - in: body
+          name: cliente_
+          schema: 
+            $ref: '#/definitions/Cliente'
+      responses:
+        201:
+          description: Cadastro efetuado co sucesso
+          schema: 
+           $ref: '#/definitions/Cliente'
+        400:
+          description: Requisicao invalida
+        500: 
+          description: Erro interno no serrvidor
+definitions:
+  
+  Cliente:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 123
+        titular:
+          type: string 
+          example: Eliara Costa
+        cpf:
+          type: string
+          maxLength: 14
+          minLength: 14
+          example: 01234567891234
+        senha: 
+          type: string
+          format: password
+          example: senha123
+        conta: 
+          type: array
+          items: 
+            $ref: '#/definitions/Conta'
+    
