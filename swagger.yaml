@@ -129,7 +129,46 @@ paths:
         401:
           description: Requisição não autorizada
         500:
-          description: Erro no servidor    
+          description: Erro no servidor   
+          
+  '/extrato/{agencia}/{numConta}/{digito}':
+    get:
+      summary: Consulta Extrato
+      description: Consulta o extrato da conta do cliente.
+      operationId: consultaExtrato
+      security:
+        - BasicAuth: []
+      parameters:
+        - in: path
+          name: agencia
+          type: integer
+          format: int32
+          required: true
+        - in: path
+          name: numConta
+          type: integer
+          format: int64
+          required: true
+        - in: path
+          name: digito
+          type: integer
+          format: int32
+          required: true
+        - in: header
+          name: Authorization
+          type: string
+          required: true
+      responses:
+        200:
+          description: Consulta de extrato efetuada com sucesso
+          schema:
+            $ref: '#/definitions/Extrato'
+        400:
+          description: Requisição inválida
+        401:
+          description: Requisição não autorizada
+        500:
+          description: Erro no servidor     
   
 definitions:
   Cliente:
@@ -204,5 +243,13 @@ definitions:
           format: date-time
         conta:
           $ref: '#/definitions/Conta'
+          
+  Extrato:
+      type: object
+      properties:
+        transacoes:
+          type: array
+          items:
+            $ref: '#/definitions/Transacao'
 
       
